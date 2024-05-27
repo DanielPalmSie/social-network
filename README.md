@@ -12,7 +12,7 @@ To run this project, you need to use Docker. Follow the steps below to get start
 1. **Clone the repository**:
 
     ```sh
-    git clone git@github.com:DanielPalmSie/social-network.git
+    git clone <repository-url>
     cd <repository-directory>
     ```
 
@@ -24,7 +24,6 @@ To run this project, you need to use Docker. Follow the steps below to get start
 
    This command will build and start the application along with all its dependencies.
 
-
 3. **Access the application**:
 
    The application will be available at [http://application.local](http://application.local).
@@ -35,6 +34,10 @@ To run this project, you need to use Docker. Follow the steps below to get start
     127.0.0.1 application.local
     ```
 
+## Database Structure
+
+The structure of the database is described in the `query.sql` file located in the root directory of the project. Make sure to refer to this file for details on the database schema.
+
 ## API Documentation
 
-A Postman collection is included in the project. You can find the `social-network.postman_collection.json` file in the root directory. Import this file into Postman to get all the API endpoints and examples.
+A Postman collection is included in the project. You can find the `postman_collection.json` file in the root directory. Import this file into Postman to get all the API endpoints and examples.
