@@ -12,7 +12,7 @@ To run this project, you need to use Docker. Follow the steps below to get start
 1. **Clone the repository**:
 
     ```sh
-    git clone <repository-url>
+    git clone git@github.com:DanielPalmSie/social-network.git
     cd <repository-directory>
     ```
 
