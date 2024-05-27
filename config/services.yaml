@@ -24,6 +24,10 @@ services:
         arguments:
             $pdo: '@pdo_connection'
 
+    App\Service\UserService:
+        arguments:
+            $pdo: '@pdo_connection'
+
     pdo_connection:
         class: PDO
         arguments:
