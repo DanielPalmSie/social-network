@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "99dc8de9-19d3-46fc-8752-2a51975f833a",
+		"name": "social-network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6160005"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"pavel\",\n    \"password\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://application.local/api/login_check",
+					"protocol": "http",
+					"host": [
+						"application",
+						"local"
+					],
+					"path": [
+						"api",
+						"login_check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"newuser\",\n    \"password\": \"securepassword\",\n    \"roles\": [\"ROLE_USER\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://application.local/api/register",
+					"protocol": "http",
+					"host": [
+						"application",
+						"local"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserById",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MTY4NDQyMTMsImV4cCI6MTcxNjg0NzgxMywicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoicGF2ZWwifQ.i7nuXwwR5Aoi3aFXz6NYOBb3FUxPaDc_O0E8RBhG_b_gX9i0xpTONV5loDi-S_tjzLV4pv8eHO7ovP9xGQYlCmBWDq0JT-oUA1Gkm3iVVSPXc8PtY-dIRB1U9BbffctVPNFIhIN6_l47CGdzTm6GYenIYQ4688agJ6euPrI-G7zlD3y0112D8iydoXE_fSQmu4pvYpkDvdFp5tMOqAxun-lz45n4cFGRkdqOeeq4xiC_m1uvxcAEqfBMCADFnxi3UUW0nyHLR4gYd15UihYUMFh5wF74nrMAMj0uq3zuuwgUS6JcMUW6oljHwYTTwj4k3Trx0GE6xWkp6yung7X1OA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://application.local/api/user/get/8",
+					"protocol": "http",
+					"host": [
+						"application",
+						"local"
+					],
+					"path": [
+						"api",
+						"user",
+						"get",
+						"8"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
