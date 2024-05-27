@@ -8,29 +8,29 @@ use PDO;
 
 class UserService
 {
-    private $passwordHasher;
-    private $pdo;
+    private UserPasswordHasherInterface $passwordHasher;
+    private DatabaseService $databaseService;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, PDO $pdo)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, DatabaseService $databaseService)
     {
         $this->passwordHasher = $passwordHasher;
-        $this->pdo = $pdo;
+        $this->databaseService = $databaseService;
     }
 
     public function registerUser($username, $plainPassword, $roles)
     {
-        // Hash the plain password
         $hashedPassword = $this->passwordHasher->hashPassword(
-            new User($username, '', $roles), // Passing a new User object
+            new User($username, '', $roles),
             $plainPassword
         );
 
-        // Save $username, $hashedPassword, and $roles to the database
-        $stmt = $this->pdo->prepare('INSERT INTO users (username, password, roles) VALUES (:username, :password, :roles)');
-        $stmt->execute([
+        $sql = 'INSERT INTO users (username, password, roles) VALUES (:username, :password, :roles)';
+        $parameters = [
             'username' => $username,
             'password' => $hashedPassword,
-            'roles' => implode(',', $roles), // Convert roles array to comma-separated string
-        ]);
+            'roles' => implode(',', $roles),
+        ];
+
+        $this->databaseService->execute($sql, $parameters);
     }
 }
