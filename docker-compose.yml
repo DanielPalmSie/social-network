@@ -35,6 +35,7 @@ services:
       - "15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - .:/csv_data
     networks:
       - app-network
 

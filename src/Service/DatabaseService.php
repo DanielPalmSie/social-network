@@ -38,4 +38,11 @@ class DatabaseService
 
         return $statement->rowCount();
     }
+
+    public function fetchAll($sql, $parameters)
+    {
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute($parameters);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

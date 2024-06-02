@@ -33,4 +33,16 @@ class UserService
 
         $this->databaseService->execute($sql, $parameters);
     }
+
+    public function searchUsers($firstNamePrefix, $lastNamePrefix)
+    {
+        $sql = 'SELECT * FROM users WHERE first_name LIKE :firstNamePrefix AND last_name LIKE :lastNamePrefix ORDER BY id';
+        $parameters = [
+            'firstNamePrefix' => $firstNamePrefix . '%',
+            'lastNamePrefix' => $lastNamePrefix . '%',
+        ];
+
+        return $this->databaseService->fetchAll($sql, $parameters);
+
+    }
 }
