@@ -34,4 +34,19 @@ class RegistrationController extends AbstractController
             return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('api/user/search', name: 'search_users', methods: ['GET'])]
+    public function searchUsers(Request $request): Response
+    {
+        $firstNamePrefix = $request->query->get('firstName');
+        $lastNamePrefix = $request->query->get('lastName');
+
+        if ($firstNamePrefix === null || $lastNamePrefix === null) {
+            return $this->json(['message' => 'Both firstName and lastName parameters are required'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $users = $this->userService->searchUsers($firstNamePrefix, $lastNamePrefix);
+
+        return $this->json($users);
+    }
 }

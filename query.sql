@@ -25,4 +25,8 @@ VALUES
     ('user9', 'password_hash_9', 'Ian', 'Taylor', '1996-08-22', 'M', 'Gaming, Photography', 'Dallas'),
     ('user10', 'password_hash_10', 'Jade', 'Anderson', '1989-10-30', 'F', 'Painting, Traveling', 'San Jose');
 
+CREATE INDEX idx_users_first_last_name ON users (first_name, last_name);
+
+EXPLAIN ANALYSE SELECT * FROM users WHERE first_name LIKE 'А%' AND last_name LIKE 'М%' ORDER BY id;
+
 
