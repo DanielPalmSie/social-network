@@ -29,4 +29,3 @@ CREATE INDEX idx_users_first_last_name ON users (first_name, last_name);
 
 EXPLAIN ANALYSE SELECT * FROM users WHERE first_name LIKE 'А%' AND last_name LIKE 'М%' ORDER BY id;
 
-
