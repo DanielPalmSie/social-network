@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   nginx:
     build:
@@ -93,8 +93,11 @@ services:
 
   telegraf:
     image: telegraf:latest
+    container_name: telegraf
+    user: "${CURRENT_UID}:${CURRENT_GID}"
     volumes:
       - ${TELEGRAF_CFG_PATH}:/etc/telegraf/telegraf.conf:rw
+      - /var/run/docker.sock:/var/run/docker.sock
     env_file:
       - .env
     depends_on:
@@ -104,6 +107,7 @@ services:
 
   grafana:
     image: grafana/grafana-oss
+    container_name: grafana
     volumes:
       - grafana-storage:/var/lib/grafana:rw
     depends_on:
