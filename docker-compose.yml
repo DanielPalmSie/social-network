@@ -38,6 +38,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_REPLICATION_USER: replica
       POSTGRES_REPLICATION_PASSWORD: replica_pass
+      ROLE: slave
     networks:
       - pgnet
 
@@ -51,6 +52,7 @@ services:
       POSTGRES_MASTER_SERVICE_HOST: postgres-master
       POSTGRES_REPLICATION_USER: replica
       POSTGRES_REPLICATION_PASSWORD: replica_pass
+      ROLE: master
     ports:
       - "15433:5432"
     volumes:
@@ -68,6 +70,7 @@ services:
       POSTGRES_MASTER_SERVICE_HOST: postgres-master
       POSTGRES_REPLICATION_USER: replica
       POSTGRES_REPLICATION_PASSWORD: replica_pass
+      ROLE: async_slave
     ports:
       - "15434:5432"
     volumes:
@@ -75,10 +78,47 @@ services:
     networks:
       - pgnet
 
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influxdb_data:/var/lib/influxdb
+    entrypoint: ["./entrypoint.sh"]
+    env_file:
+      - .env
+    networks:
+      - pgnet
+
+  telegraf:
+    image: telegraf:latest
+    volumes:
+      - ${TELEGRAF_CFG_PATH}:/etc/telegraf/telegraf.conf:rw
+    env_file:
+      - .env
+    depends_on:
+      - influxdb
+    networks:
+      - pgnet
+
+  grafana:
+    image: grafana/grafana-oss
+    volumes:
+      - grafana-storage:/var/lib/grafana:rw
+    depends_on:
+      - influxdb
+    ports:
+      - ${GRAFANA_PORT}:3000
+    networks:
+      - pgnet
+
 volumes:
   postgres_master_data:
   postgres_replica_data:
   postgres_async_replica_data:
+  influxdb_data:
+  grafana-storage:
 
 networks:
   pgnet:
