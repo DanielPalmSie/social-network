@@ -94,7 +94,7 @@ services:
   telegraf:
     image: telegraf:latest
     container_name: telegraf
-    user: "${CURRENT_UID}:${CURRENT_GID}"
+    user: "telegraf:1"
     volumes:
       - ${TELEGRAF_CFG_PATH}:/etc/telegraf/telegraf.conf:rw
       - /var/run/docker.sock:/var/run/docker.sock
