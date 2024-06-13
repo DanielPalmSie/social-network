@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('api/')]
+#[Route('api/')]
 class UserController extends AbstractController
 {
     private DatabaseService $databaseService;
@@ -20,7 +21,7 @@ class UserController extends AbstractController
     #[Route('user/get/{id}', name: 'get_user', methods: ['GET'])]
     public function getUserById(int $id): Response
     {
-        $user = $this->databaseService->query('SELECT * FROM users WHERE id = ?', [$id]);
+        $user = $this->databaseService->queryFromSlave1('SELECT * FROM users WHERE id = ?', [$id]);
 
         if (empty($user)) {
             return $this->json(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
