@@ -15,3 +15,7 @@
 .idea
 
 .DS_Store
+
+/postgres_async_replica_data
+/postgres_master_data
+/postgres_replica_data
