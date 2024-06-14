@@ -31,10 +31,10 @@ class UserService
             'roles' => implode(',', $roles),
         ];
 
-        $this->databaseService->execute($sql, $parameters);
+        $this->databaseService->executeOnMaster($sql, $parameters);
     }
 
-    public function searchUsers($firstNamePrefix, $lastNamePrefix)
+    public function searchUsersFromSlave2($firstNamePrefix, $lastNamePrefix)
     {
         $sql = 'SELECT * FROM users WHERE first_name LIKE :firstNamePrefix AND last_name LIKE :lastNamePrefix ORDER BY id';
         $parameters = [
@@ -42,7 +42,6 @@ class UserService
             'lastNamePrefix' => $lastNamePrefix . '%',
         ];
 
-        return $this->databaseService->fetchAll($sql, $parameters);
-
+        return $this->databaseService->queryFromSlave2($sql, $parameters);
     }
 }

@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('api/')]
-#[Route('api/')]
 class UserController extends AbstractController
 {
     private DatabaseService $databaseService;

@@ -45,7 +45,7 @@ class RegistrationController extends AbstractController
             return $this->json(['message' => 'Both firstName and lastName parameters are required'], Response::HTTP_BAD_REQUEST);
         }
 
-        $users = $this->userService->searchUsers($firstNamePrefix, $lastNamePrefix);
+        $users = $this->userService->searchUsersFromSlave2($firstNamePrefix, $lastNamePrefix);
 
         return $this->json($users);
     }
