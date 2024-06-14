@@ -44,7 +44,7 @@ class DatabaseService
         return $this->executeQuery($this->slave2Connection, $sql, $parameters);
     }
 
-    public function executeQuery(PDO $connection, string $sql, array $parameters = [])
+    private function executeQuery(PDO $connection, string $sql, array $parameters = [])
     {
         $statement = $connection->prepare($sql);
         $statement->execute($parameters);
@@ -58,13 +58,5 @@ class DatabaseService
         $statement->execute($parameters);
 
         return $statement->rowCount();
-    }
-
-    public function fetchAll($sql, $parameters = [], $fromSlave = true)
-    {
-        $connection = $fromSlave ? $this->slave1Connection : $this->masterConnection;
-        $stmt = $connection->prepare($sql);
-        $stmt->execute($parameters);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
