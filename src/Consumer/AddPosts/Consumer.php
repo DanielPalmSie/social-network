@@ -11,13 +11,10 @@ use Redis;
 
 class Consumer implements ConsumerInterface
 {
-    private Redis $redis;
-
-    public function __construct(private readonly DatabaseService $databaseService)
-    {
-        $this->redis = new Redis();
-        $this->redis->connect('redis', 6379);
-    }
+    public function __construct(
+        private readonly DatabaseService $databaseService,
+        private readonly Redis $redis,
+    ) {}
 
     public function execute(AMQPMessage $msg): int
     {
@@ -28,13 +25,10 @@ class Consumer implements ConsumerInterface
         $postId = $message->getPostId();
         $timestamp = $message->getTimestamp();
 
-        // Получение списка друзей (замените на реальный метод получения друзей)
         $friends = $this->getFriends($userId);
 
         foreach ($friends as $friendId) {
-            // Обновление кеша в Redis
             $this->redis->zAdd("feed:$friendId", $timestamp, $postId);
-            // Обрезка до 1000 элементов
             $this->redis->zremrangebyrank("feed:$friendId", 0, -1001);
         }
 

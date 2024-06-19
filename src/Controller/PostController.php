@@ -37,7 +37,6 @@ class PostController extends AbstractController
         $content = $data['content'];
         $createdAt = new \DateTime();
 
-        // Сохранение поста в базу данных
         $sql = "
             INSERT INTO posts (user_id, content, created_at, updated_at)
             VALUES (:user_id, :content, :created_at, :updated_at)
