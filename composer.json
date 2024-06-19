@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "lexik/jwt-authentication-bundle": "^2.21",
+        "php-amqplib/rabbitmq-bundle": "^2.16",
         "symfony/console": "6.1.*",
         "symfony/dotenv": "6.1.*",
         "symfony/flex": "^2",

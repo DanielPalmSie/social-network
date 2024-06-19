@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
+#[Route('api/')]
 class RegistrationController extends AbstractController
 {
     private UserService $userService;
@@ -18,7 +19,7 @@ class RegistrationController extends AbstractController
         $this->userService = $userService;
     }
 
-    #[Route('api/register', name: 'register_user', methods: ['POST'])]
+    #[Route('register', name: 'register_user', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -35,7 +36,7 @@ class RegistrationController extends AbstractController
         }
     }
 
-    #[Route('api/user/search', name: 'search_users', methods: ['GET'])]
+    #[Route('user/search', name: 'search_users', methods: ['GET'])]
     public function searchUsers(Request $request): Response
     {
         $firstNamePrefix = $request->query->get('firstName');

@@ -35,6 +35,15 @@ services:
             $databaseService: '@App\Service\DatabaseService'
             $passwordHasher: '@security.password_hasher'
 
+    App\Command\LoadFeedDataCommand:
+        arguments:
+            $databaseService: '@App\Service\DatabaseService'
+
+    App\Service\AsyncService:
+        calls:
+            - [ 'registerProducer', [ !php/const App\Service\AsyncService::ADD_POST, '@old_sound_rabbit_mq.add_posts_producer' ] ]
+
+
     pdo_connection:
         class: PDO
         arguments:

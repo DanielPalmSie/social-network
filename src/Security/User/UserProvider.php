@@ -44,7 +44,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
 
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        $stmt = $this->pdo->prepare('SELECT username, password, roles FROM users WHERE username = :username');
+        $stmt = $this->pdo->prepare('SELECT id, username, password, roles FROM users WHERE username = :username');
         $stmt->execute(['username' => $identifier]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -52,13 +52,8 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             throw new UserNotFoundException(sprintf('User with identifier "%s" not found.', $identifier));
         }
 
-        $user['roles'] = explode(',', $user['roles']); // Convert roles to an array
+        $user['roles'] = explode(',', $user['roles']);
 
-        return new User($user['username'], $user['password'], $user['roles']);
-    }
-
-    public function loadUserByUsername(string $username): UserInterface
-    {
-        return $this->loadUserByIdentifier($username);
+        return new User($user['id'],$user['username'], $user['password'], $user['roles']);
     }
 }

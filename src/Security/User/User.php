@@ -7,12 +7,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    private $id;
     private $username;
     private $password;
     private $roles;
 
-    public function __construct(string $username, string $password, array $roles)
+    public function __construct(int $id, string $username, string $password, array $roles)
     {
+        $this->id = $id;
         $this->username = $username;
         $this->password = $password;
         $this->roles = $roles;
@@ -45,6 +47,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return $this->id;
     }
 }

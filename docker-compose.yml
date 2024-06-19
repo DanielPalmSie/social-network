@@ -117,12 +117,47 @@ services:
     networks:
       - pgnet
 
+  redis:
+    container_name: 'redis'
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - pgnet
+
+  redisinsight:
+      container_name: redisinsight
+      image: redis/redisinsight:latest
+      ports:
+        - "5540:5540"
+      volumes:
+        - redisinsight:/data
+      depends_on:
+        - redis
+      networks:
+        - pgnet
+
+  rabbitmq:
+    image: rabbitmq:3.7.5-management
+    working_dir: /app
+    hostname: rabbit-mq
+    container_name: 'rabbit-mq'
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - pgnet
+
 volumes:
   postgres_master_data:
   postgres_replica_data:
   postgres_async_replica_data:
   influxdb_data:
   grafana-storage:
+  redisinsight:
 
 networks:
   pgnet:
