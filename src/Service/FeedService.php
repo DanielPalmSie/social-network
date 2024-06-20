@@ -33,7 +33,8 @@ class FeedService
         $sql = "
             SELECT p.id, p.user_id, p.created_at
             FROM posts p
-            WHERE p.user_id = :user_id
+            JOIN friends f ON p.user_id = f.friend_id
+            WHERE f.user_id = :user_id
             ORDER BY p.created_at DESC
             LIMIT 1000
         ";
