@@ -24,39 +24,19 @@ services:
     networks:
       - pgnet
 
-  master:
-    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
-    image: "citusdata/citus:12.1.3"
-    ports: [ "${COORDINATOR_EXTERNAL_PORT:-5432}:5432" ]
-    labels: [ "com.citusdata.role=Master" ]
-    environment: &AUTH
-      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+  postgresql:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      PGUSER: "${POSTGRES_USER:-postgres}"
-      PGPASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST_AUTH_METHOD: "${POSTGRES_HOST_AUTH_METHOD:-trust}"
-    networks:
-      - pgnet
-
-  worker:
-    image: "citusdata/citus:12.1.3"
-    labels: [ "com.citusdata.role=Worker" ]
-    depends_on: [ manager ]
-    environment: *AUTH
-    command: "/wait-for-manager.sh"
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_HOST: "${POSTGRES_HOST}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
     volumes:
-      - healthcheck-volume:/healthcheck
-    networks:
-      - pgnet
-
-  manager:
-    container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
-    image: "citusdata/membership-manager:0.3.0"
-    volumes:
-      - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
-      - healthcheck-volume:/healthcheck
-    depends_on: [ master ]
-    environment: *AUTH
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - pgnet
 
@@ -134,7 +114,7 @@ services:
       - pgnet
 
 volumes:
-  healthcheck-volume:
+  pgdata:
   influxdb_data:
   grafana-storage:
   redisinsight:

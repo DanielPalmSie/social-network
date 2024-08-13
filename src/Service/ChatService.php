@@ -2,25 +2,34 @@
 
 namespace App\Service;
 
+use Redis;
+
 class ChatService
 {
-    private DatabaseService $databaseService;
-
-    public function __construct(DatabaseService $databaseService)
-    {
-        $this->databaseService = $databaseService;
-    }
+    public function __construct(
+        private readonly Redis $redis,
+        private readonly DatabaseService $databaseService
+    ) {}
 
     public function sendMessage(int $dialogId, int $senderId, string $content)
     {
-        $sql = 'INSERT INTO messages (dialog_id, sender_id, content) VALUES (:dialog_id, :sender_id, :content)';
-        $parameters = [
+        // Создание уникального идентификатора для сообщения 101771
+        $messageId = $this->redis->incr('message_id');
+
+        // Формирование ключа и данных сообщения
+        $messageKey = "message:$messageId";
+        $messageData = [
             'dialog_id' => $dialogId,
             'sender_id' => $senderId,
             'content' => $content,
+            'timestamp' => date('Y-m-d H:i:s'), // Добавляем текущий timestamp
         ];
 
-        $this->databaseService->execute($sql, $parameters);
+        // Сохранение сообщения в Redis как хэш
+        $this->redis->hMSet($messageKey, $messageData);
+
+        // Добавление ID сообщения в список сообщений для соответствующего диалога
+        $this->redis->rPush("dialog:$dialogId:messages", $messageId);
     }
 
     public function listMessages(int $dialogId)

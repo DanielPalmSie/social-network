@@ -52,6 +52,10 @@ services:
         arguments:
             $redis: '@redis'
 
+    App\Service\ChatService:
+        arguments:
+            $redis: '@redis'
+
     App\Consumer\AddPosts\Consumer:
         arguments:
             $databaseService: '@App\Service\DatabaseService'
