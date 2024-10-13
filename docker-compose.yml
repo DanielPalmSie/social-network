@@ -1,5 +1,16 @@
 version: '3.8'
 services:
+  haproxy-pg:
+    image: haproxy:latest
+    container_name: haproxy-pg
+    restart: "no"
+    networks:
+      - pgnet
+    volumes:
+      - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    ports:
+      - "5432:5432"
+
   nginx:
     build:
       context: ./nginx
@@ -13,16 +24,27 @@ services:
     networks:
       - pgnet
 
-  app:
+  app1:
     build:
       context: ./fpm
       dockerfile: Dockerfile
     image: myapp/php
-    container_name: app
+    container_name: app1
     volumes:
       - .:/data
     networks:
       - pgnet
+
+  app2:
+      build:
+        context: ./fpm
+        dockerfile: Dockerfile
+      image: myapp/php
+      container_name: app2
+      volumes:
+        - .:/data
+      networks:
+        - pgnet
 
   postgres-master:
     container_name: pgmaster
@@ -38,7 +60,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_REPLICATION_USER: replica
       POSTGRES_REPLICATION_PASSWORD: replica_pass
-      ROLE: slave
+      ROLE: master
     networks:
       - pgnet
 
@@ -52,7 +74,7 @@ services:
       POSTGRES_MASTER_SERVICE_HOST: postgres-master
       POSTGRES_REPLICATION_USER: replica
       POSTGRES_REPLICATION_PASSWORD: replica_pass
-      ROLE: master
+      ROLE: slave
     ports:
       - "15433:5432"
     volumes:
@@ -114,6 +136,9 @@ services:
       - influxdb
     ports:
       - ${GRAFANA_PORT}:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - pgnet
 
